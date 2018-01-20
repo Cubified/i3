@@ -814,12 +814,94 @@ void start_config_error_nagbar(const char *configpath, bool has_errors) {
     free(pageraction);
 }
 
+char *replace_char(char* str, char find, char replace){
+    char *current_pos = strchr(str,find);
+    while (current_pos){
+        *current_pos = replace;
+        current_pos = strchr(current_pos,find);
+    }
+    return str;
+}
+
+/*
+ * https://stackoverflow.com/questions/5457608/how-to-remove-the-character-at-a-given-index-from-a-string-in-c/8733511#8733511
+ *
+ */
+void remove_char(char *str, char garbage) {
+    char *src, *dst;
+    for (src = dst = str; *src != '\0'; src++) {
+        *dst = *src;
+        if (*dst != garbage) dst++;
+    }
+    *dst = '\0';
+}
+
+/*
+ * https://stackoverflow.com/questions/779875/what-is-the-function-to-replace-string-in-c#779960
+ *
+ */
+char *str_replace(char *orig, char *rep, char *with) {
+       char *result;
+       char *ins;
+       char *tmp;
+       int len_rep;
+       int len_with;
+       int len_front;
+       int count;
+
+       if (!orig || !rep)
+           return NULL;
+       len_rep = strlen(rep);
+       if (len_rep == 0)
+           return NULL;
+       if (!with)
+           with = "";
+       len_with = strlen(with);
+       
+       ins = orig;
+       for (count = 0; tmp = strstr(ins, rep); ++count) {
+           ins = tmp + len_rep;
+       }
+       
+       tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+       
+       if (!result)
+            return NULL;
+
+        while (count--) {
+            ins = strstr(orig, rep);
+            len_front = ins - orig;
+            tmp = strncpy(tmp, orig, len_front) + len_front;
+            tmp = strcpy(tmp, with) + len_with;
+            orig += len_front + len_rep;
+        }
+        strcpy(tmp, orig);
+    return result;
+}
+
 /*
  * Inserts or updates a variable assignment depending on whether it already exists.
  *
  */
 static void upsert_variable(struct variables_head *variables, char *key, char *value) {
-    struct Variable *current;
+    struct Variable *current, *nearest;
+    char *dollarPtr = strchr(value, '$');
+    if(dollarPtr != NULL){
+        char *newKey;
+        char *newValue;
+        SLIST_FOREACH(nearest, variables, variables) {
+            char *found = strstr(value, nearest->key);
+            if(found == NULL){
+                continue;
+            }
+            newKey = nearest->key;
+            newValue = nearest->value;
+            break;
+        }
+        remove_char(newValue, '"');
+        value = sstrdup(str_replace(value, newKey, newValue));
+    }
+
     SLIST_FOREACH(current, variables, variables) {
         if (strcmp(current->key, key) != 0) {
             continue;

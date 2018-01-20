@@ -353,6 +353,7 @@ int main(int argc, char *argv[]) {
     int o, option_index = 0;
     enum { TYPE_ERROR = 0,
            TYPE_WARNING = 1 } bar_type = TYPE_ERROR;
+    bool colorsReset = false;
 
     static struct option long_options[] = {
         {"version", no_argument, 0, 'v'},
@@ -360,12 +361,18 @@ int main(int argc, char *argv[]) {
         {"button", required_argument, 0, 'b'},
         {"help", no_argument, 0, 'h'},
         {"message", required_argument, 0, 'm'},
+        {"canceltext", required_argument, 0, 'c'},
         {"type", required_argument, 0, 't'},
+        {"background", required_argument, 0, 'B'},
+        {"buttoncolor", required_argument, 0, 'F'},
+        {"textcolor", required_argument, 0, 'T'},
         {0, 0, 0, 0}};
 
-    char *options_string = "b:f:m:t:vh";
+    char *options_string = "b:f:m:c:t:B:F:T:vh";
 
     prompt = i3string_from_utf8("Please do not run this program.");
+
+    btn_close.label = i3string_from_utf8("X");
 
     while ((o = getopt_long(argc, argv, options_string, long_options, &option_index)) != -1) {
         switch (o) {
@@ -380,12 +387,29 @@ int main(int argc, char *argv[]) {
                 i3string_free(prompt);
                 prompt = i3string_from_utf8(optarg);
                 break;
+            case 'c':
+                btn_close.label = i3string_from_utf8(optarg);
+                break;
             case 't':
                 bar_type = (strcasecmp(optarg, "warning") == 0 ? TYPE_WARNING : TYPE_ERROR);
                 break;
+            case 'B':
+                colorsReset = true;
+                color_background = draw_util_hex_to_color(optarg);
+                color_border_bottom = draw_util_hex_to_color(optarg);
+                break;
+            case 'F':
+                colorsReset = true;
+                color_button_background = draw_util_hex_to_color(optarg);
+                color_border = draw_util_hex_to_color(optarg);
+                break;
+            case 'T':
+                colorsReset = true;
+                color_text = draw_util_hex_to_color(optarg);
+                break;
             case 'h':
                 printf("i3-nagbar " I3_VERSION "\n");
-                printf("i3-nagbar [-m <message>] [-b <button> <action>] [-t warning|error] [-f <font>] [-v]\n");
+                printf("i3-nagbar [-m <message>] [-b <button> <action>] [-t warning|error] [-c <text>] [-f <font>] [-B <color>] [-F <color>] [-T <color>] [-v]\n");
                 return 0;
             case 'b':
                 buttons = srealloc(buttons, sizeof(button_t) * (buttoncnt + 1));
@@ -402,8 +426,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    btn_close.label = i3string_from_utf8("X");
-
     int screens;
     if ((conn = xcb_connect(NULL, &screens)) == NULL ||
         xcb_connection_has_error(conn))
@@ -418,14 +440,14 @@ int main(int argc, char *argv[]) {
     root_screen = xcb_aux_get_screen(conn, screens);
     root = root_screen->root;
 
-    if (bar_type == TYPE_ERROR) {
+    if (bar_type == TYPE_ERROR && !colorsReset) {
         /* Red theme for error messages */
         color_button_background = draw_util_hex_to_color("#680a0a");
         color_background = draw_util_hex_to_color("#900000");
         color_text = draw_util_hex_to_color("#ffffff");
         color_border = draw_util_hex_to_color("#d92424");
         color_border_bottom = draw_util_hex_to_color("#470909");
-    } else {
+    } else if (!colorsReset) {
         /* Yellowish theme for warnings */
         color_button_background = draw_util_hex_to_color("#ffc100");
         color_background = draw_util_hex_to_color("#ffa8000");
