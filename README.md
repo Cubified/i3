@@ -4,7 +4,7 @@ This is my i3-gaps fork which adds support for recursive variables, as well as a
 
 ## Recursive Variables
 
-Per the i3 docs, "Variables expansion is not recursive so it is not possible to define a variable with a value containing another variable," however this fork allows just that.
+Per the i3 docs, ["Variables expansion is not recursive so it is not possible to define a variable with a value containing another variable,"](https://i3wm.org/docs/userguide.html#variables) however this fork allows just that.
 An example (similar to my own `~/.config/i3/config`):
 
      set $CONFDIR "$HOME/.config/i3"
