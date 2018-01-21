@@ -814,15 +814,6 @@ void start_config_error_nagbar(const char *configpath, bool has_errors) {
     free(pageraction);
 }
 
-char *replace_char(char* str, char find, char replace){
-    char *current_pos = strchr(str,find);
-    while (current_pos){
-        *current_pos = replace;
-        current_pos = strchr(current_pos,find);
-    }
-    return str;
-}
-
 /*
  * https://stackoverflow.com/questions/5457608/how-to-remove-the-character-at-a-given-index-from-a-string-in-c/8733511#8733511
  *
@@ -841,41 +832,41 @@ void remove_char(char *str, char garbage) {
  *
  */
 char *str_replace(char *orig, char *rep, char *with) {
-       char *result;
-       char *ins;
-       char *tmp;
-       int len_rep;
-       int len_with;
-       int len_front;
-       int count;
+    char *result;
+    char *ins;
+    char *tmp;
+    int len_rep;
+    int len_with;
+    int len_front;
+    int count;
 
-       if (!orig || !rep)
-           return NULL;
-       len_rep = strlen(rep);
-       if (len_rep == 0)
-           return NULL;
-       if (!with)
-           with = "";
-       len_with = strlen(with);
+    if (!orig || !rep)
+        return NULL;
+    len_rep = strlen(rep);
+    if (len_rep == 0)
+        return NULL;
+    if (!with)
+        with = "";
+    len_with = strlen(with);
        
-       ins = orig;
-       for (count = 0; tmp = strstr(ins, rep); ++count) {
-           ins = tmp + len_rep;
-       }
+    ins = orig;
+    for (count = 0; tmp = strstr(ins, rep); ++count) {
+        ins = tmp + len_rep;
+    }
        
-       tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
        
-       if (!result)
-            return NULL;
+    if (!result)
+        return NULL;
 
-        while (count--) {
-            ins = strstr(orig, rep);
-            len_front = ins - orig;
-            tmp = strncpy(tmp, orig, len_front) + len_front;
-            tmp = strcpy(tmp, with) + len_with;
-            orig += len_front + len_rep;
-        }
-        strcpy(tmp, orig);
+    while (count--) {
+        ins = strstr(orig, rep);
+        len_front = ins - orig;
+        tmp = strncpy(tmp, orig, len_front) + len_front;
+        tmp = strcpy(tmp, with) + len_with;
+        orig += len_front + len_rep;
+    }
+    strcpy(tmp, orig);
     return result;
 }
 
