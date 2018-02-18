@@ -215,7 +215,6 @@ CFGFUN(smart_borders, const char *enable) {
 }
 
 CFGFUN(smart_gaps, const char *enable, const char *workspace) {
-    printf("Smart gaps enabled on workspace - %s\n",workspace);
     config.smart_gaps[config.smart_gaps_counter] = workspace;
     config.smart_gaps_counter++;
 }
