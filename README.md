@@ -1,6 +1,6 @@
 # i3 4.14.1-gaps-recursive
 
-This is my i3-gaps fork which adds support for recursive variables, as well as allows for further customization of the nagbar
+This is my i3-gaps fork which adds support for recursive variables, per-workspace smart gaps, and further customization of the nagbar
 
 ## Recursive Variables
 
@@ -12,6 +12,15 @@ An example (similar to my own `~/.config/i3/config`):
 	 set $BAR     "$CONFDIR/start_bar.sh"
 
 The value of $BAR will be `/home/USERNAME/.config/i3/start_bar.sh`.
+
+## Per-Workspace smart_gaps
+
+The `smart_gaps` config option now takes one additional argument:
+
+     set $workspace1 "First Workspace"
+	 smart_gaps on $workspace1
+
+This will cause single windows in workspace one to not be affected by the `gaps` setting.
 
 ## i3-nagbar
 

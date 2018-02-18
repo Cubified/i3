@@ -255,7 +255,8 @@ struct Config {
     smart_borders_t smart_borders;
 
     /* Disable gaps if there is only one container on the workspace */
-    bool smart_gaps;
+    int smart_gaps_counter;
+    const char *smart_gaps[255]; // 255 because I'm a bad programmer who doesn't know C
 };
 
 /**

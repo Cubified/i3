@@ -2254,7 +2254,13 @@ char *con_get_tree_representation(Con *con) {
  */
 gaps_t calculate_effective_gaps(Con *con) {
     Con *workspace = con_get_workspace(con);
-    if (workspace == NULL || (config.smart_gaps && con_num_visible_children(workspace) <= 1))
+    bool smart_gaps = false;
+    for(int i=0;i<config.smart_gaps_counter+1;i++){
+        if(config.smart_gaps[i] != NULL && strcmp(config.smart_gaps[i],workspace->name) == 0){
+            smart_gaps = true;
+        }
+    }
+    if (workspace == NULL || (smart_gaps && con_num_visible_children(workspace) <= 1))
         return (gaps_t){0, 0};
 
     gaps_t gaps = {
