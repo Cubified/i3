@@ -13,15 +13,6 @@ An example (similar to my own `~/.config/i3/config`):
 
 The value of $BAR will be `/home/USERNAME/.config/i3/start_bar.sh`.
 
-## Per-Workspace smart_gaps
-
-The `smart_gaps` config option now takes one additional argument:
-
-     set $workspace1 "First Workspace"
-	 smart_gaps on $workspace1
-
-This will cause single windows in workspace one to not be affected by the `gaps` setting.
-
 ## i3-nagbar
 
 The i3-nagbar has been modified to provide four additional options:
