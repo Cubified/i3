@@ -254,9 +254,11 @@ struct Config {
     /* Should single containers on a workspace receive a border? */
     smart_borders_t smart_borders;
 
-    /* Disable gaps if there is only one container on the workspace */
+    /* Counter used to determine how many workspaces have smart gaps */
     int smart_gaps_counter;
-    const char *smart_gaps[255]; // 255 because I'm a bad programmer who doesn't know C
+
+    /* Array containing names of all workspaces with smart gaps */
+    const char *smart_gaps[10];
 };
 
 /**

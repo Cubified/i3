@@ -2256,7 +2256,7 @@ gaps_t calculate_effective_gaps(Con *con) {
     Con *workspace = con_get_workspace(con);
     bool smart_gaps = false;
     for(int i=0;i<config.smart_gaps_counter+1;i++){
-        if(config.smart_gaps[i] != NULL && strcmp(config.smart_gaps[i],workspace->name) == 0){
+        if(config.smart_gaps[i] != NULL && workspace->name != NULL && strcmp(config.smart_gaps[i],workspace->name) == 0){
             smart_gaps = true;
         }
     }
