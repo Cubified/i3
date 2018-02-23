@@ -83,11 +83,7 @@ state SMART_BORDERS:
 # smart_gaps on|off
 state SMART_GAPS:
   enabled = '1', 'yes', 'true', 'on', 'enable', 'active'
-      -> SMART_GAPS_WORKSPACE
-
-state SMART_GAPS_WORKSPACE:
-  workspace = string
-      -> call cfg_smart_gaps($enabled,$workspace)
+      -> call cfg_smart_gaps($enabled)
 
 # floating_minimum_size <width> x <height>
 state FLOATING_MINIMUM_SIZE_WIDTH:

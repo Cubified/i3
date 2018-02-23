@@ -214,13 +214,8 @@ CFGFUN(smart_borders, const char *enable) {
         config.smart_borders = eval_boolstr(enable) ? ON : OFF;
 }
 
-CFGFUN(smart_gaps, const char *enable, const char *workspace) {
-    if(&config.smart_gaps_counter == NULL){
-        config.smart_gaps_counter = 0;
-    }
-    const char *why = workspace; // ???
-    config.smart_gaps[config.smart_gaps_counter] = workspace;
-    config.smart_gaps_counter++;
+CFGFUN(smart_gaps, const char *enable) {
+    config.smart_gaps = eval_boolstr(enable);
 }
 
 CFGFUN(floating_minimum_size, const long width, const long height) {
